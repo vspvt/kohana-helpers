@@ -1,5 +1,5 @@
 {
-	"name":        "vadskakov/kohana-helpers",
+	"name":        "vspvt/kohana-helpers",
 	"type":        "kohana-module",
 	"version":     "0.1",
 	"description": "Helpers module for Kohana 3.3.1",
