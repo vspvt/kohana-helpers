@@ -1,0 +1,25 @@
+{
+	"name":        "vspvt/kohana-helpers",
+	"type":        "kohana-module",
+	"version":     "0.1",
+	"description": "Helpers module for Kohana 3.3.1",
+	"homepage":    "https://bitbucket.org/vadskakov/kohana-helpers",
+	"license":     "MIT",
+	"keywords":    ["kohana", "framework", "helpers"],
+	"authors": [
+		{
+			"name":     "Vad Skakov",
+			"email":    "vad.skakov@gmail.com",
+			"homepage": "https://bitbucket.org/vadskakov",
+			"role":     "developer"
+		}
+	],
+	"support": {
+		"issues":   "https://bitbucket.org/vadskakov/kohana-helpers/issues"
+	},
+	"require": {
+		"php":                 	">=5.4",
+		"composer/installers": 	"~1.0",
+		"kohana/core":          "3.3.1"
+	}
+}
