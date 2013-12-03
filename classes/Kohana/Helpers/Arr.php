@@ -85,4 +85,35 @@ class Kohana_Helpers_Arr
 		return Kohana_Arr::is_array($data) ? array_sum($data) : $default;
 	}
 
+	/**
+	 * @param array  $array
+	 * @param string $keyPrefix
+	 * @param string $delimeter
+	 * @param bool   $trimAsNULL
+	 *
+	 * @return array
+	 */
+	public static function flattenExtended($array, $keyPrefix = '', $delimeter = '.', $trimAsNULL = TRUE)
+	{
+		$keyPrefix = trim($keyPrefix);
+		$flat = [];
+		foreach ($array as $key => $value) {
+			$newKey = $keyPrefix . $key;
+			if (Kohana_Arr::is_array($value)) {
+				$flat[Valid::digit($newKey) ? (int) $newKey : $newKey] = $value;
+				$flat = self::merge($flat, self::flattenExtended($value, $newKey . $delimeter, $delimeter));
+			} else {
+				$flat[Valid::digit($newKey)
+					? (int) $newKey
+					: $newKey
+				] = $trimAsNULL
+					? Helpers_Text::trimAsNULL($value)
+					: $value
+				;
+			}
+		}
+
+		return $flat;
+	}
+
 }

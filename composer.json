@@ -1,7 +1,7 @@
 {
 	"name":        "vspvt/kohana-helpers",
 	"type":        "kohana-module",
-	"version":     "0.1.1",
+	"version":     "0.1.2",
 	"description": "Helpers module for Kohana 3.3.1",
 	"homepage":    "https://github.com/vspvt/kohana-helpers",
 	"license":     "MIT",
