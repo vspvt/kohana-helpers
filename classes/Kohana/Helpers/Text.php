@@ -2,7 +2,7 @@
 /**
  * @author: Vad Skakov <vad.skakov@gmail.com>
  */
-  
+
 class Kohana_Helpers_Text extends Text
 {
 	/**
@@ -78,6 +78,57 @@ class Kohana_Helpers_Text extends Text
 		if ($nullable && !strlen($value)) $value = NULL;
 
 		return $asInt ? self::setTypeInt($value, $nullable) : $value;
+	}
+
+	/**
+	 * Возвращает слово во множестевенном/единственном числе на основании $n
+	 *
+	 * @param int         $n
+	 * @param string      $one
+	 * @param null|string $two
+	 * @param null|string $five
+	 *
+	 * @return string
+	 */
+	public static function plural($n, $one, $two = NULL, $five = NULL)
+	{
+		if (is_array($one)) {
+			$values = [Kohana_Arr::get($one, 0)];
+			$values[1] = Kohana_Arr::get($one, 1, $values[0]);
+			$values[2] = Kohana_Arr::get($one, 2, $values[1]);
+		} else {
+			$values = [$one];
+			$values[1] = NULL !== $two ? $two : $one;
+			$values[2] = NULL !== $five ? $five : $values[1];
+		}
+
+		$idx = $n % 10 == 1 && $n % 100 != 11
+			? 0
+			: ($n % 10 >= 2 && $n % 10 <= 4 && ($n % 100 < 10 || $n % 100 >= 20)
+				? 1
+				: 2
+			);
+
+		return $values[$idx];
+	}
+
+	/**
+	 * @param int         $n
+	 * @param null|string $format
+	 * @param string      $one
+	 * @param null|string $two
+	 * @param null|string $five
+	 *
+	 * @return string
+	 */
+	public static function pluralFormat($n, $format = NULL, $one, $two = NULL, $five = NULL)
+	{
+		if (NULL === $format) $format = ':number :plural';
+
+		return strtr($format, [
+			':number' => $n,
+			':plural' => self::plural($n, $one, $two, $five)
+		]);
 	}
 
 }
