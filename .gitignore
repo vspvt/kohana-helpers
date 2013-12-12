@@ -1,2 +1,5 @@
 .idea/*
+modules/*
+vendor/*
+composer.lock
 
