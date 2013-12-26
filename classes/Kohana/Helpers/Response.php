@@ -1,19 +1,31 @@
 <?php
+
 /**
- * @author: Vad Skakov <vad.skakov@gmail.com>
+ * Class Kohana_Helpers_Response
  */
-  
 class Kohana_Helpers_Response
 {
+	/**
+	 * @param null       $data
+	 * @param int        $httpCode
+	 * @param null|array $headers
+	 *
+	 * @throws HTTP_Exception_Redirect
+	 */
 	static function json($data = NULL, $httpCode = 200, $headers = NULL)
 	{
+		if ($data instanceof HTTP_Exception_Redirect) {
+			throw $data;
+		}
+
 		$response = Kohana_Response::factory();
-		$response->headers([
-			'cache-control' => 'no-cache, no-store, max-age=0, must-revalidate',
-			'content-type' => 'application/json; charset=utf-8',
-		]);
-		if (Kohana_Arr::is_array($headers)) $response->headers($headers);
 		try {
+			$response->headers([
+				'cache-control' => 'no-cache, no-store, max-age=0, must-revalidate',
+				'content-type' => 'application/json; charset=utf-8',
+			]);
+			if (Kohana_Arr::is_array($headers)) $response->headers($headers);
+
 			$response->status($httpCode);
 		} catch (Exception $e) {
 			$response->status($httpCode = 500);
@@ -23,10 +35,10 @@ class Kohana_Helpers_Response
 		if ($data instanceof Exception) {
 			if ($data instanceof HTTP_Exception) {
 				$response->status($httpCode = $data->getCode());
-			} elseif ($httpCode < 500) {
+			} elseif ($httpCode < 400) {
 				$response->status($httpCode = 500);
 			}
-			$data = self::exceptionAsArray($data);
+			$data = Helpers_Arr::exception($data);
 		}
 
 		if (NULL === $data && $httpCode == 200) {
@@ -35,7 +47,7 @@ class Kohana_Helpers_Response
 			try {
 				$response->body(json_encode($data, JSON_UNESCAPED_UNICODE));
 			} catch (Exception $e) {
-				$response->body(json_encode(self::exceptionAsArray($e), JSON_UNESCAPED_UNICODE), 500);
+				$response->body(json_encode(Helpers_Arr::exception($e), JSON_UNESCAPED_UNICODE), 500);
 			}
 		}
 
@@ -44,27 +56,14 @@ class Kohana_Helpers_Response
 		exit($response);
 	}
 
-	public static function exceptionAsArray(Exception $e = NULL)
+	/**
+	 * @param Exception  $e
+	 * @param int        $httpCode
+	 * @param null|array $headers
+	 */
+	public static function exception(Exception $e, $httpCode = 500, $headers = NULL)
 	{
-		if ($e instanceof Exception) {
-			$data = [
-				'message' => $e->getMessage(),
-				'code' => $e->getCode(),
-			];
-
-			if (!Kohana_Helpers_Core::isProduction()) {
-				$data = Kohana_Helpers_Arr::merge($data, [
-					'file' => $e->getFile(),
-					'line' => $e->getLine(),
-					'trace' => $e->getTrace(),
-					'previous' => self::exceptionAsArray($e->getPrevious()),
-				]);
-			}
-		} else {
-			$data = NULL;
-		}
-
-		return $data;
+		self::json(Helpers_Arr::exception($e), $httpCode, $headers);
 	}
 
 }

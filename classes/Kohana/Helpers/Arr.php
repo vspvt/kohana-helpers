@@ -59,12 +59,9 @@ class Kohana_Helpers_Arr
 	}
 
 	/**
-	 * @param mixed $array1
-	 * @param mixed $array2
-	 *
 	 * @return array
 	 */
-	public static function merge($array1, $array2)
+	public static function merge()
 	{
 		$result = [];
 		for ($i = 0; $i < func_num_args(); $i++) {
@@ -114,6 +111,34 @@ class Kohana_Helpers_Arr
 		}
 
 		return $flat;
+	}
+
+	/**
+	 * @param Exception $e
+	 *
+	 * @return array|null
+	 */
+	public static function exception(Exception $e = NULL)
+	{
+		if ($e instanceof Exception) {
+			$data = [
+				'message' => Helpers_Text::trimAsNULL($e->getMessage()),
+				'code' => $e->getCode(),
+			];
+
+			if (!Kohana_Helpers_Core::isProduction()) {
+				$data = Kohana_Helpers_Arr::merge($data, [
+					'file' => $e->getFile(),
+					'line' => $e->getLine(),
+					'trace' => $e->getTrace(),
+					'previous' => Helpers_Arr::exception($e->getPrevious()),
+				]);
+			}
+		} else {
+			$data = NULL;
+		}
+
+		return $data;
 	}
 
 }
