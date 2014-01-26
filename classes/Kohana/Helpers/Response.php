@@ -60,9 +60,14 @@ class Kohana_Helpers_Response
 	 * @param Exception  $e
 	 * @param int        $httpCode
 	 * @param null|array $headers
+	 *
+	 * @throws HTTP_Exception_Redirect
 	 */
 	public static function exception(Exception $e, $httpCode = 500, $headers = NULL)
 	{
+		if ($e instanceof HTTP_Exception_Redirect) throw $e;
+		if ($e instanceof HTTP_Exception) $httpCode = $e->getCode() ;
+
 		self::json(Helpers_Arr::exception($e), $httpCode, $headers);
 	}
 
