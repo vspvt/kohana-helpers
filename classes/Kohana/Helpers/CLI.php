@@ -3,8 +3,10 @@
  * @author: Vad Skakov <vad.skakov@gmail.com>
  */
 
-class Kohana_Helpers_CLI extends Kohana_Helpers
+class Kohana_Helpers_CLI
 {
+	use Kohana_HelpersConfig;
+
 	protected static $dateFormat = 'd.m.Y H:i:s';
 	protected static $dateSuffix = ' ';
 	protected static $logWrite = FALSE;

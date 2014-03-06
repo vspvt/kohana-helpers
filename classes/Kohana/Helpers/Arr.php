@@ -3,7 +3,7 @@
  * @author: Vad Skakov <vad.skakov@gmail.com>
  */
 
-class Kohana_Helpers_Arr
+class Kohana_Helpers_Arr extends Arr
 {
 	/**
 	 * Checks if a value exists in an array
@@ -17,7 +17,7 @@ class Kohana_Helpers_Arr
 
 	public static function inArray($needle, $haystack, $strict = NULL)
 	{
-		return Kohana_Arr::is_array($haystack) && in_array($needle, $haystack, $strict);
+		return static::is_array($haystack) && in_array($needle, $haystack, $strict);
 	}
 
 	/**
@@ -30,7 +30,7 @@ class Kohana_Helpers_Arr
 	 */
 	public static function count($var, $mode = COUNT_NORMAL)
 	{
-		return Kohana_Arr::is_array($var) ? count($var, $mode) : 0;
+		return static::is_array($var) ? count($var, $mode) : 0;
 	}
 
 	/**
@@ -41,7 +41,7 @@ class Kohana_Helpers_Arr
 	 */
 	public static function asArray($var, $delimeter = ',')
 	{
-		if (Kohana_Arr::is_array($var)) {
+		if (static::is_array($var)) {
 			return $var;
 		}
 		try {
@@ -65,7 +65,7 @@ class Kohana_Helpers_Arr
 	{
 		$result = [];
 		for ($i = 0; $i < func_num_args(); $i++) {
-			$result = Kohana_Arr::merge($result, self::asArray(func_get_arg($i)));
+			$result = parent::merge($result, static::asArray(func_get_arg($i)));
 		}
 
 		return $result;
@@ -79,7 +79,7 @@ class Kohana_Helpers_Arr
 	 */
 	public static function sum($data, $default = 0)
 	{
-		return Kohana_Arr::is_array($data) ? array_sum($data) : $default;
+		return static::is_array($data) ? array_sum($data) : $default;
 	}
 
 	/**
@@ -96,9 +96,9 @@ class Kohana_Helpers_Arr
 		$flat = [];
 		foreach ($array as $key => $value) {
 			$newKey = $keyPrefix . $key;
-			if (Kohana_Arr::is_array($value)) {
+			if (static::is_array($value)) {
 				$flat[Valid::digit($newKey) ? (int) $newKey : $newKey] = $value;
-				$flat = self::merge($flat, self::flattenExtended($value, $newKey . $delimeter, $delimeter));
+				$flat = static::merge($flat, static::flattenExtended($value, $newKey . $delimeter, $delimeter));
 			} else {
 				$flat[Valid::digit($newKey)
 					? (int) $newKey

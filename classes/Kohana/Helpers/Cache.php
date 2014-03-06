@@ -3,8 +3,10 @@
  * @author: Vad Skakov <vad.skakov@gmail.com>
  */
   
-class Kohana_Helpers_Cache extends Kohana_Helpers
+class Kohana_Helpers_Cache
 {
+	use Kohana_HelpersConfig;
+
 	public static $logExceptions = FALSE;
 
 	/**

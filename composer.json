@@ -1,7 +1,7 @@
 {
 	"name":        "vspvt/kohana-helpers",
 	"type":        "kohana-module",
-	"version":     "0.1.8.1",
+	"version":     "0.1.9",
 	"description": "Helpers module for Kohana 3.3.1",
 	"homepage":    "https://github.com/vspvt/kohana-helpers",
 	"license":     "MIT",
@@ -21,5 +21,10 @@
 		"php":                 	">=5.4",
 		"composer/installers": 	"~1.0",
 		"kohana/core":          "3.3.1"
+	},
+	"require-dev": {
+		"kohana/database": "3.3.1",
+		"kohana/cache": "3.3.1",
+		"kohana/minion": "3.3.1"
 	}
 }

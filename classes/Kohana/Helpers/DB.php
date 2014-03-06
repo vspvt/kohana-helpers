@@ -7,60 +7,93 @@ class Kohana_Helpers_DB
 {
 	protected static $transactions = [];
 
-	protected static function instanceName($instance = NULL)
+	/**
+	 * @param null $name
+	 *
+	 * @return null|string
+	 */
+	protected static function instanceName($name = NULL)
 	{
-		return NULL === $instance ? Database::$default : $instance;
-	}
-
-	protected static function _instance($instance = NULL)
-	{
-		if (!class_exists('Kohana_Database')) {
-			throw new Exception('Kohana_Database module not loaded');
-		}
-		$instance = self::instanceName($instance);
-
-		if (!array_key_exists($instance, static::$transactions)) {
-			static::$transactions[$instance] = FALSE;
-		}
-
-		return Kohana_Database::instance($instance);
+		return NULL === $name ? Database::$default : $name;
 	}
 
 	/**
-	 * @param null $instance
+	 * @param null $name
+	 *
+	 * @return Database
+	 * @throws ErrorException
+	 */
+	protected static function _instance($name = NULL)
+	{
+		if (!class_exists('Kohana_Database')) {
+			throw new ErrorException('Kohana_Database module not loaded');
+		}
+		$name = static::instanceName($name);
+
+		if (!array_key_exists($name, static::$transactions)) {
+			static::$transactions[$name] = FALSE;
+		}
+
+		return Kohana_Database::instance($name);
+	}
+
+	/**
+	 * @param null $name
 	 * @param null $mode
 	 *
 	 * @return bool
 	 */
-	static function begin($instance = NULL, $mode = NULL)
+	static function begin($name = NULL, $mode = NULL)
 	{
-		$object = self::_instance($instance);
-		$instance = self::instanceName($instance);
+		$object = static::_instance($name);
+		$name = static::instanceName($name);
 
-		if (static::$transactions[$instance]) return FALSE;
-		static::$transactions[$instance] = $object->begin($mode);
+		if (static::$transactions[$name]) return FALSE;
+		static::$transactions[$name] = $object->begin($mode);
 
-		return static::$transactions[$instance];
+		return static::$transactions[$name];
 	}
 
 	/**
-	 * @param null $instance
+	 * @param null $name
 	 *
 	 * @return bool
 	 */
-	static function commit($instance = NULL)
+	static function commit($name = NULL)
 	{
-		return self::_instance($instance)->commit();
+		return static::_instance($name)->commit();
 	}
 
 	/**
-	 * @param null $instance
+	 * @param null $name
 	 *
 	 * @return bool
 	 */
-	static function rollback($instance = NULL)
+	static function rollback($name = NULL)
 	{
-		return self::_instance($instance)->rollback();
+		return static::_instance($name)->rollback();
+	}
+
+	/**
+	 * @param callable $closure
+	 * @param null     $name
+	 * @param null     $mode
+	 *
+	 * @return mixed
+	 * @throws Exception
+	 */
+	static function transaction(Closure $closure, $name = NULL, $mode = NULL)
+	{
+		try {
+			$transactionStarted = static::begin($name, $mode);
+			$result = call_user_func($closure);
+			if ($transactionStarted) static::commit($name);
+
+			return $result;
+		} catch (Exception $e) {
+			if (isset($transactionStarted) && $transactionStarted) static::rollback($name);
+			throw $e;
+		}
 	}
 
 }
