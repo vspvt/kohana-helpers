@@ -17,6 +17,10 @@ Helpers classes for Kohana 3.3.1:
 ---
 
 ## Changelog
+- **v.0.1.9.3** (2014-03-06):
+	- changed:
+		- `Kohana_Helpers_Request::getQuery` fixed type casting
+
 - **v.0.1.9.2** (2014-03-06):
 	- changed:
 		- `Kohana_Helpers_Request` added missing static statements

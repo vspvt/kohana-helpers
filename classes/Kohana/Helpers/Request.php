@@ -129,7 +129,7 @@ class Kohana_Helpers_Request
 		$value = static::current()->query($key);
 		if (NULL === $value || is_scalar($value)) {
 			NULL !== $value or $value = $default;
-			$value = Helpers_Text::setType($value, $castType, $nullable);
+			NULL === $castType or $value = Helpers_Text::setType($value, $castType, $nullable);
 		}
 
 		return $value;
