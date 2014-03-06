@@ -53,7 +53,7 @@ class Kohana_Helpers_Request
 	/**
 	 * @return array
 	 */
-	public function getMethodsAllowed()
+	public static function getMethodsAllowed()
 	{
 		return Kohana_Helpers_Arr::asArray(static::config('request.methods.allowed'));
 	}
@@ -61,7 +61,7 @@ class Kohana_Helpers_Request
 	/**
 	 * @return array
 	 */
-	public function getMethodsWithBody()
+	public static function getMethodsWithBody()
 	{
 		return Kohana_Helpers_Arr::asArray(static::config('request.methods.withBody'));
 	}
@@ -69,7 +69,7 @@ class Kohana_Helpers_Request
 	/**
 	 * @return array
 	 */
-	public function getMethodsParseBody()
+	public static function getMethodsParseBody()
 	{
 		return Kohana_Helpers_Arr::asArray(static::config('request.methods.parseBody'));
 	}
