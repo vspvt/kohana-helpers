@@ -59,9 +59,12 @@ class Kohana_Helpers_Arr extends Arr
 	}
 
 	/**
+	 * @param   array  $array1      initial array
+	 * @param   array  $array2,...  array to merge
+	 *
 	 * @return array
 	 */
-	public static function merge()
+	public static function merge($array1, $array2)
 	{
 		$result = [];
 		for ($i = 0; $i < func_num_args(); $i++) {
