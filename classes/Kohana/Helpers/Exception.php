@@ -8,7 +8,7 @@ class Kohana_Helpers_Exception extends Kohana_Exception implements JsonSerializa
 	use Kohana_HelpersConfig;
 
 	protected $code = 0;
-	protected $message = 'exception.undefined';
+	protected $message = 'helpers.exception';
 
 	public function __construct($message = NULL, array $variables = NULL, $code = NULL, Exception $previous = NULL)
 	{
