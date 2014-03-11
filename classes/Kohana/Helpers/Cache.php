@@ -7,8 +7,6 @@ class Kohana_Helpers_Cache
 {
 	use Kohana_HelpersConfig;
 
-	public static $logExceptions = FALSE;
-
 	/**
 	 * @return bool
 	 */
@@ -29,14 +27,19 @@ class Kohana_Helpers_Cache
 
 	/**
 	 * @param Exception $e
+	 *
+	 * @throws Exception
 	 */
-	protected static function log(Exception $e)
+	protected static function exception(Exception $e)
 	{
-		$logLevel = self::config('cache.log.exceptions', static::$logExceptions);
-
+		$logLevel = self::config('cache.exception.log', FALSE);
 		if (FALSE !== $logLevel) {
 			Kohana_Exception::log($e, $logLevel);
 		}
+
+		if (self::config('cache.exception.throw', FALSE)) {
+			throw $e;
+		};
 	}
 
 	/**
@@ -51,7 +54,7 @@ class Kohana_Helpers_Cache
 		try {
 			!self::classExists() or $result = self::instance($group)->delete($key);
 		} catch (Cache_Exception $e) {
-			self::log($e);
+			self::exception($e);
 		}
 
 		return $result;
@@ -68,7 +71,7 @@ class Kohana_Helpers_Cache
 		try {
 			!self::classExists() or $result = self::instance($group)->delete_all();
 		} catch (Cache_Exception $e) {
-			self::log($e);
+			self::exception($e);
 		}
 
 		return $result;
@@ -87,7 +90,7 @@ class Kohana_Helpers_Cache
 		try {
 			!self::classExists() or $result = self::instance($group)->get($key, $default);
 		} catch (Cache_Exception $e) {
-			self::log($e);
+			self::exception($e);
 		}
 
 		return $result;
@@ -107,7 +110,7 @@ class Kohana_Helpers_Cache
 		try {
 			!self::classExists() or $result = self::instance($group)->set($key, $data, $lifetime);
 		} catch (Cache_Exception $e) {
-			self::log($e);
+			self::exception($e);
 		}
 
 		return $result;

@@ -5,5 +5,5 @@
 
 class Kohana_Exception_Request extends Kohana_Helpers_Exception
 {
-
+	protected $message = 'exception.request';
 }

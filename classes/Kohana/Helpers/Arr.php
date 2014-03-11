@@ -5,6 +5,8 @@
 
 class Kohana_Helpers_Arr extends Arr
 {
+	use Kohana_HelpersConfig;
+
 	/**
 	 * Checks if a value exists in an array
 	 *
@@ -59,8 +61,8 @@ class Kohana_Helpers_Arr extends Arr
 	}
 
 	/**
-	 * @param   array  $array1      initial array
-	 * @param   array  $array2,...  array to merge
+	 * @param   array $array1     initial array
+	 * @param   array $array2,... array to merge
 	 *
 	 * @return array
 	 */
@@ -103,13 +105,9 @@ class Kohana_Helpers_Arr extends Arr
 				$flat[Valid::digit($newKey) ? (int) $newKey : $newKey] = $value;
 				$flat = static::merge($flat, static::flattenExtended($value, $newKey . $delimeter, $delimeter));
 			} else {
-				$flat[Valid::digit($newKey)
-					? (int) $newKey
-					: $newKey
-				] = $trimAsNULL
+				$flat[Valid::digit($newKey)	? (int) $newKey	: $newKey] = $trimAsNULL
 					? Helpers_Text::trimAsNULL($value)
-					: $value
-				;
+					: $value;
 			}
 		}
 
@@ -117,31 +115,29 @@ class Kohana_Helpers_Arr extends Arr
 	}
 
 	/**
-	 * @param Exception $e
+	 * @deprecated use Helpers_Exception::toArray
 	 *
-	 * @return array|null
+	 * @param Exception  $e
+	 * @param null|array $config
+	 *
+	 * @return array
 	 */
-	public static function exception(Exception $e = NULL)
+	public static function exception(Exception $e = NULL, $config = NULL)
 	{
-		if ($e instanceof Exception) {
-			$data = [
-				'message' => Helpers_Text::trimAsNULL($e->getMessage()),
-				'code' => $e->getCode(),
-			];
+		return Kohana_Helpers_Exception::toArray($e, $config);
+	}
 
-			if (!Kohana_Helpers_Core::isProduction()) {
-				$data = Kohana_Helpers_Arr::merge($data, [
-					'file' => $e->getFile(),
-					'line' => $e->getLine(),
-					'trace' => $e->getTrace(),
-					'previous' => Helpers_Arr::exception($e->getPrevious()),
-				]);
-			}
-		} else {
-			$data = NULL;
-		}
+	/**
+	 * @param string       $glue
+	 * @param array|string $pieces
+	 *
+	 * @return string|NULL
+	 */
+	public static function implode($glue, $pieces)
+	{
+		$pieces = static::asArray($pieces);
 
-		return $data;
+		return static::is_array($pieces) ? implode($glue, $pieces) : NULL;
 	}
 
 }

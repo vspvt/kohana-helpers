@@ -9,22 +9,35 @@ class Kohana_Helpers_Text extends Text
 	 * @param      $value
 	 * @param      $charlist
 	 * @param bool $utf8
+	 * @param bool $nullable
+	 *
+	 * @return null|string
+	 */
+	public static function trim($value, $charlist = NULL, $utf8 = TRUE, $nullable = FALSE)
+	{
+		if (NULL !== $value) {
+			if ($utf8) {
+				$value = Kohana_UTF8::trim($value, $charlist);
+				if (!Kohana_UTF8::strlen($value) && $nullable) $value = NULL;
+			} else {
+				$value = trim($value, $charlist);
+				if (!strlen($value) && $nullable) $value = NULL;
+			}
+		}
+
+		return $value;
+	}
+
+	/**
+	 * @param      $value
+	 * @param      $charlist
+	 * @param bool $utf8
 	 *
 	 * @return null|string
 	 */
 	public static function trimAsNULL($value, $charlist = NULL, $utf8 = TRUE)
 	{
-		if (NULL !== $value) {
-			if ($utf8) {
-				$value = Kohana_UTF8::trim($value, $charlist);
-				if (!Kohana_UTF8::strlen($value)) $value = NULL;
-			} else {
-				$value = trim($value, $charlist);
-				if (!strlen($value)) $value = NULL;
-			}
-		}
-
-		return $value;
+		return static::trim($value, $charlist, $utf8, TRUE);
 	}
 
 	/**

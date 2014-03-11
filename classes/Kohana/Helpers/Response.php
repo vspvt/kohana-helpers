@@ -38,7 +38,7 @@ class Kohana_Helpers_Response
 			} elseif ($httpCode < 400) {
 				$response->status($httpCode = 500);
 			}
-			$data = Helpers_Arr::exception($data);
+			$data = Helpers_Exception::toArray($data);
 		}
 
 		if (NULL === $data && $httpCode == 200) {
@@ -47,7 +47,7 @@ class Kohana_Helpers_Response
 			try {
 				$response->body(json_encode($data, JSON_UNESCAPED_UNICODE));
 			} catch (Exception $e) {
-				$response->body(json_encode(Helpers_Arr::exception($e), JSON_UNESCAPED_UNICODE), 500);
+				$response->body(json_encode(Helpers_Exception::toArray($e), JSON_UNESCAPED_UNICODE), 500);
 			}
 		}
 
@@ -68,7 +68,7 @@ class Kohana_Helpers_Response
 		if ($e instanceof HTTP_Exception_Redirect) throw $e;
 		if ($e instanceof HTTP_Exception) $httpCode = $e->getCode() ;
 
-		self::json(Helpers_Arr::exception($e), $httpCode, $headers);
+		self::json(Helpers_Exception::toArray($e), $httpCode, $headers);
 	}
 
 }

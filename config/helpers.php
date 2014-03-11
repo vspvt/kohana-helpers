@@ -3,11 +3,14 @@
  * @author: Vad Skakov <vad.skakov@gmail.com>
  */
 return [
+	// Helpers_Cache
 	'cache' => [
-		'log' => [
-			'exceptions' => FALSE // FALSE or set Log::{level}
-		]
+		'exception' => [
+			'log' => FALSE, // FALSE or set Log::{level}
+			'throw' => FALSE,
+		],
 	],
+	// Helpers_CLI
 	'cli' => [
 		'date' => [
 			'format' => 'd.m.Y H:i:s',
@@ -18,6 +21,7 @@ return [
 			'replace' => FALSE, // FALSE or set Log::{level}
 		]
 	],
+	// Helpers_Request
 	'request' => [
 		'methods' => [
 			'allowed' => [
@@ -46,5 +50,19 @@ return [
 				'deleteOnShutdown' => TRUE,
 			]
 		],
-	]
+	],
+	// Helpers_Exception
+	'exception' => [
+		'toArray' => [
+			'message' => 'message', // calls $e->getMessage()
+			'code' => 'code', // calls $e->getCode()
+			'line' => 'line', // calls $e->getLine()
+			'file' => 'file', // calls $e->getFile()
+			'previous' => 'previous', // calls $e->getPrevious()
+			'trace' => [
+				'key' => 'trace', // value must be string key of result array or FALSE
+				'asString' => FALSE, // FALSE - calls $e->getTrace(), TRUE - calls $e->getTraceAsString()
+			],
+		],
+	],
 ];
