@@ -169,6 +169,14 @@ class Kohana_Helpers_Request
 		return $result;
 	}
 
+	/**
+	 * @param null $pathKey
+	 * @param null $pathDefault
+	 * @param null $order
+	 * @param bool $forced
+	 *
+	 * @return array|mixed
+	 */
 	public static function data($pathKey = NULL, $pathDefault = NULL, $order = NULL, $forced = FALSE)
 	{
 		$order = Helpers_Text::trimAsNULL(NULL === $order ? $order = static::config('request.data.order') : $order);
@@ -227,7 +235,7 @@ class Kohana_Helpers_Request
 	}
 
 	/**
-	 * @throws Exception_Request_InvalidJSON
+	 * @throws Helpers_Request_Exception_InvalidJSON
 	 * @return array
 	 */
 	public static function getParsedData()
@@ -239,7 +247,7 @@ class Kohana_Helpers_Request
 			if (strlen($body)) {
 				if (FALSE !== strpos($_SERVER['CONTENT_TYPE'], 'application/json')) {
 					$data = json_decode($body, TRUE);
-					if (NULL === $data) throw new Exception_Request_InvalidJSON;
+					if (NULL === $data) throw new Helpers_Request_Exception_InvalidJSON;
 				} else {
 					$data = static::parseMultiPartContent($body);
 				}

@@ -11,19 +11,41 @@ Helpers classes for Kohana 3.3.1:
 - `Helpers_Exception` extends `Kohana_Helpers_Exception` implements `JsonSerializable`
 - `Helpers_File` extends `Kohana_Helpers_File`
 - `Helpers_Request` extends `Kohana_Helpers_Request`
+- `Helpers_Request_Exception` extends `Helpers_Exception`
+- `Helpers_Request_Exception_InvalidJSON` extends `Helpers_Request_Exception`
 - `Helpers_Response` extends `Kohana_Helpers_Response`
 - `Helpers_Text` extends `Kohana_Helpers_Text` extends `Text`
 
 ---
 
 ## Changelog
+- **v.0.1.9.5** (2014-03-11):
+	- removed:
+		- `messages/ru.php`
+		- class `Exception_Request`
+		- class `Exception_Request_InvalidJSON`
+	- added:
+		- [`i18n/ru`](./i18n/ru.php):
+			- `helpers.exception`
+			- `helpers.request.exception`
+			- `helpers.request.exception.invalidJSON`
+		- [`i18n/en`](./i18n/en.php):
+			- `helpers.exception`
+			- `helpers.request.exception`
+			- `helpers.request.exception.invalidJSON`
+		- class `Helpers_Request_Exception`
+		- class `Helpers_Request_Exception_InvalidJSON`
+	- changed:
+		- class property `Helpers_Exception::$message`
+		- function `Helpers_Request::getParsedData` now throws `Helpers_Request_Exception_InvalidJSON`
+
 - **v.0.1.9.4** (2014-03-11):
 	- added:
 		- function `Helpers_Arr::implode($glue, $pieces)`
 		- function `Helpers_Exception::toArray(Exception $e = NULL, array $config = NULL)`
 		- function `Helpers_Exception->jsonSerialize()` using `Helpers_Exception::toArray`
 		- function `Helpers_Text::trim($value, $charlist = NULL, $utf8 = TRUE, $nullable = FALSE)`
-		- [`messages/ru`](./messages/ru.php):
+		- `messages/ru`:
 			- added `exception.undefined`
 	- changed:
 		- function `Helpers_Arr::exception` now **depricated** and will be **removed** in v.0.2
