@@ -19,6 +19,10 @@ Helpers classes for Kohana 3.3.1:
 ---
 
 ## Changelog
+- **v.0.1.9.6** (2014-06-15):
+	- added:
+		- function `Helpers_Text::boolval($value, $filterNullOnFailure = FALSE)`
+
 - **v.0.1.9.5** (2014-03-11):
 	- removed:
 		- `messages/ru.php`

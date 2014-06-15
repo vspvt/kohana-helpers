@@ -41,9 +41,9 @@ class Kohana_Helpers_Text extends Text
 	}
 
 	/**
-	 * @param      $value
-	 * @param      $type
-	 * @param bool $nullable
+	 * @param mixed  $value
+	 * @param string $type
+	 * @param bool   $nullable
 	 *
 	 * @return mixed
 	 */
@@ -177,6 +177,17 @@ class Kohana_Helpers_Text extends Text
 		];
 
 		return strtr($string, $converter);
+	}
+
+	/**
+	 * @param mixed $value
+	 * @param bool  $filterNullOnFailure
+	 *
+	 * @return bool|null
+	 */
+	public static function boolval($value, $filterNullOnFailure = FALSE)
+	{
+		return filter_var($value, FILTER_VALIDATE_BOOLEAN, $filterNullOnFailure ? FILTER_NULL_ON_FAILURE : NULL);
 	}
 
 }
